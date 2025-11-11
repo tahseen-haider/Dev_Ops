@@ -19,7 +19,6 @@ const limiter = rateLimit({
 });
 
 
-// Backend alive test
 app.get("/", (req, res) => {
   res.status(200).send("BACKEND IS RUNNING SUCCESSFULLY!");
 });
