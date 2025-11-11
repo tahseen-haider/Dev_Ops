@@ -31,8 +31,11 @@ jobs:
       - name: Checkout repo
         uses: actions/checkout@v4
 
-      - name: Deploy to Render (Staging)
-        uses: render-examples/github-actions-deploy@v1
-        with:
-          api-key: ${{ secrets.RENDER_API_KEY }}
-          service-id: ${{ secrets.RENDER_STAGING_SERVICE_ID }}
+      - name: Deploy to Render
+        run:
+          echo "Simulating deploy..."
+          
+        # uses: johnbeynon/render-deploy-action@v0.0.8
+        # with:
+        #   api-key: ${{ secrets.RENDER_API_KEY }}
+        #   service-id: ${{ secrets.RENDER_STAGING_SERVICE_ID }}

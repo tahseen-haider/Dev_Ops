@@ -44,3 +44,15 @@ npm run dev
 npm test
 ```
 
+ ## 🚀 API Routes Overview
+ 
+ | Method | Route                 | Description |
+ |--------|----------------------|-------------|
+ | GET    | `/`                  | Check if the backend is running. |
+ | GET    | `/api/getUsers`      | Fetch all users (rate-limited). |
+ | GET    | `/api/getUser/:id`   | Fetch a specific user by ID. |
+ | POST   | `/api/storeUser`     | Add a new user. |
+ | PUT    | `/api/updateUser/:id`| Update an existing user. |
+ | DELETE | `/api/deleteUser/:id`| Remove a user by ID. |
+ 
+ > **Note:** Users are stored in-memory; all data will reset when the server restarts.
