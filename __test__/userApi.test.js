@@ -15,7 +15,7 @@ describe("1User API Tests", () => {
    it("GET / should return backend alive message", async () => {
     const res = await request(app).get("/");
     expect(res.statusCode).toBe(200);
-    expect(res.text).toBe("BACKEND IS RUNNING SUCCESSFULLY!");
+    expect(res.text).toBe("BACKEND IS UNNING SUCCESSFULLY!");
   });
 
   it("should return user data if user exists", async () => {
