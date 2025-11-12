@@ -3,7 +3,7 @@ import request from "supertest";
 import app from "../server/config_server.js";
 
 
-describe("1User API Tests", () => {
+describe("User API Tests", () => {
   beforeEach(() => {
     inMemStorage.length = 0;
     inMemStorage.push(
@@ -15,7 +15,7 @@ describe("1User API Tests", () => {
    it("GET / should return backend alive message", async () => {
     const res = await request(app).get("/");
     expect(res.statusCode).toBe(200);
-    expect(res.text).toBe("BACKEND ISUNNING SUCCESSFULLY!");
+    expect(res.text).toBe("BACKEND IS RUNNING SUCCESSFULLY!");
   });
 
   it("should return user data if user exists", async () => {
