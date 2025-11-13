@@ -1,0 +1,16 @@
+name: Deploy Staging
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    uses: ./.github/workflows/deploy.yml
+    with:
+      branch: main
+      docker_user: ${{ secrets.DOCKER_USER }}
+      docker_password: ${{ secrets.DOCKER_PASSWORD }}
+      render_api_key: ${{ secrets.RENDER_API_KEY }}
+      render_service_id: ${{ secrets.RENDER_SERVICE_ID }}
