@@ -44,17 +44,17 @@ jobs:
       - name: Log in to Docker Hub
         uses: docker/login-action@v2
         with:
-          username: ${{ inputs.docker_user }}
-          password: ${{ inputs.docker_password }}
+          username: ${{ secrets.docker_user }}
+          password: ${{ secrets.docker_password }}
 
       - name: Build Docker image
         run: |
-          IMAGE_NAME=${{ inputs.docker_user }}/my-node-app
+          IMAGE_NAME=${{ secrets.docker_user }}/my-node-app
           docker build -t $IMAGE_NAME:${GITHUB_SHA} .
 
       - name: Push Docker image
         run: |
-          IMAGE_NAME=${{ inputs.docker_user }}/my-node-app
+          IMAGE_NAME=${{ secrets.docker_user }}/my-node-app
           docker push $IMAGE_NAME:${GITHUB_SHA}
 
   deploy-to-render:
@@ -67,5 +67,5 @@ jobs:
       - name: Deploy to Render
         uses: johnbeynon/render-deploy-action@v0.0.8
         with:
-          api-key: ${{ inputs.render_api_key }}
-          service-id: ${{ inputs.render_service_id }}
+          api-key: ${{ secrets.render_api_key }}
+          service-id: ${{ secrets.render_service_id }}
