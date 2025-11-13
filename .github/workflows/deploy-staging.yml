@@ -10,6 +10,7 @@ jobs:
     uses: ./.github/workflows/deploy.yml
     with:
       branch: main
+    secrets:
       docker_user: ${{ secrets.DOCKER_USER }}
       docker_password: ${{ secrets.DOCKER_PASSWORD }}
       render_api_key: ${{ secrets.RENDER_API_KEY }}
