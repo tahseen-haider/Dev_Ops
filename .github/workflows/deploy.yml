@@ -1,5 +1,3 @@
-name: Node.js CI/CD Deploy
-
 on:
   workflow_call:
     inputs:
