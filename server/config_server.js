@@ -1,4 +1,3 @@
-import rateLimit from "express-rate-limit";
 import express from "express";
 
 // Server Stored Memory
@@ -9,22 +8,12 @@ const app = express();
 
 app.use(express.json());
 
-// Rate Limiter
-const limiter = rateLimit({
-  windowMs: 1 * 60 * 1000, 
-  max: 8,
-  message: {
-    message: "Too many requests, please try again later.",
-  },
-});
-
-
 app.get("/", (req, res) => {
   res.status(200).send("BACKEND IS RUNNING SUCCESSFULLY!");
 });
 
 // GET to fetch all users
-app.get("/api/getUsers", limiter, async (req, res) => {
+app.get("/api/getUsers", async (req, res) => {
   const allUsers = inMemStorage;
   return res.status(200).json(allUsers);
 });

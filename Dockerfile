@@ -1,10 +1,10 @@
-FROM node:20-alpine AS base
+FROM node:18-slim
 
 WORKDIR /app
 
 COPY package*.json ./
 
-RUN npm ci --only=production
+RUN npm install -f
 
 COPY . .
 
