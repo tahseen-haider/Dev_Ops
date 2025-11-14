@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 
-const API_URL = "http://127.0.0.1:5000/api";
+const API_URL = import.meta.env.VITE_API_URL || "http://127.0.0.1:5000";
 
 function App() {
   const [users, setUsers] = useState([]);
@@ -9,7 +9,7 @@ function App() {
   const [editId, setEditId] = useState(null);
 
   const fetchUsers = async () => {
-    const res = await axios.get(`${API_URL}/getUsers`);
+    const res = await axios.get(`${API_URL}/api/getUsers`);
     setUsers(res.data);
   };
 
@@ -17,7 +17,7 @@ function App() {
     // define async function inside the effect
     const getUsers = async () => {
       try {
-        const res = await axios.get(`${API_URL}/getUsers`);
+        const res = await axios.get(`${API_URL}/api/getUsers`);
         setUsers(res.data); // safe, inside async callback
       } catch (err) {
         console.error(err);
@@ -34,17 +34,17 @@ function App() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (editId) {
-      await axios.put(`${API_URL}/updateUser/${editId}`, form);
+      await axios.put(`${API_URL}/api/updateUser/${editId}`, form);
       setEditId(null);
     } else {
-      await axios.post(`${API_URL}/storeUser`, form);
+      await axios.post(`${API_URL}/api/storeUser`, form);
     }
     setForm({ name: "", age: "", profession: "" });
     fetchUsers();
   };
 
   const deleteUser = async (id) => {
-    await axios.delete(`${API_URL}/deleteUser/${id}`);
+    await axios.delete(`${API_URL}/api/deleteUser/${id}`);
     fetchUsers();
   };
 
