@@ -1,6 +1,6 @@
 import { inMemStorage } from "../server/config_server.js";
-import request from "supertest";
 import app from "../server/config_server.js";
+import request from "supertest";
 
 
 describe("User API Tests", () => {

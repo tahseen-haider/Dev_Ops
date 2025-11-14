@@ -1,34 +1,26 @@
-version: '3.9'
-
 services:
-  app:
-    image: node:20-alpine
-    container_name: my-node-app
-    working_dir: /app
-    volumes:
-      - ./:/app
-      - /app/node_modules
+  backend:
+    build: ./backend
+    image: myapp-backend
+    container_name: my-backend
     ports:
-      - "3000:3000"
+      - "5000:5000"
     environment:
-      NODE_ENV: development
-      DATABASE_URL: postgres://postgres:password@db:5432/mydb
-    command: npm run dev
+      NODE_ENV: production
+    networks:
+      - app-net
+
+  frontend:
+    build: ./frontend
+    image: myapp-frontend
+    container_name: my-frontend
+    ports:
+      - "3000:80"
     depends_on:
-      - db
+      - backend
+    networks:
+      - app-net
 
-  db:
-    image: postgres:15-alpine
-    container_name: my-postgres
-    restart: always
-    environment:
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: password
-      POSTGRES_DB: mydb
-    ports:
-      - "5432:5432"
-    volumes:
-      - pgdata:/var/lib/postgresql/data
-
-volumes:
-  pgdata:
+networks:
+  app-net:
+    driver: bridge

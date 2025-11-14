@@ -1,4 +1,5 @@
 import express from "express";
+import cors from "cors"
 
 // Server Stored Memory
 export let inMemStorage = [];
@@ -7,7 +8,7 @@ const PORT = 5000;
 const app = express();
 
 app.use(express.json());
-
+app.use(cors())
 app.get("/", (req, res) => {
   res.status(200).send("BACKEND IS RUNNING SUCCESSFULLY!");
 });
