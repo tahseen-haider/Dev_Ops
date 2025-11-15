@@ -108,6 +108,7 @@ jobs:
         with:
           api-key: ${{ secrets.render_api_key }}
           service-id: ${{ secrets.render_service_id_backend }}
+        continue-on-error: false
 
   deploy-frontend:
     runs-on: ubuntu-latest
@@ -119,3 +120,4 @@ jobs:
         with:
           api-key: ${{ secrets.render_api_key }}
           service-id: ${{ secrets.render_service_id_frontend }}
+        continue-on-error: false
