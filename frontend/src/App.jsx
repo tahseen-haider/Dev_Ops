@@ -49,7 +49,7 @@ function App() {
   };
 
   const editUser = (user) => {
-    setEditId(user.id);
+    setEditId(user._id);
     setForm({
       name: user.name,
       age: user.age,
@@ -66,10 +66,6 @@ function App() {
         minHeight: "100vh",
       }}
     >
-      <h1 style={{ textAlign: "center", marginBottom: "40px", color: "#333" }}>
-        User Management (React + Express)
-      </h1>
-
       <form
         onSubmit={handleSubmit}
         style={{
@@ -169,7 +165,7 @@ function App() {
       >
         {users.map((user) => (
           <div
-            key={user.id}
+            key={user._id}
             style={{
               backgroundColor: "#fff",
               padding: "20px",
@@ -203,7 +199,7 @@ function App() {
             </button>
 
             <button
-              onClick={() => deleteUser(user.id)}
+              onClick={() => deleteUser(user._id)}
               style={{
                 padding: "8px 12px",
                 borderRadius: "6px",

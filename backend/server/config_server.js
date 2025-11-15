@@ -1,96 +1,77 @@
 import express from "express";
-import cors from "cors"
+import cors from "cors";
+import User from "./models/User.js"; // Import the Mongoose model
 
-// Server Stored Memory
-export let inMemStorage = [];
-
-const PORT = 5000;
 const app = express();
-
 app.use(express.json());
-app.use(cors())
+app.use(cors());
+
+// Health Check
 app.get("/", (req, res) => {
   res.status(200).send("BACKEND IS RUNNING SUCCESSFULLY!");
 });
 
-// GET to fetch all users
+// GET all users
 app.get("/api/getUsers", async (req, res) => {
-  const allUsers = inMemStorage;
-  return res.status(200).json(allUsers);
-});
-
-// GET to fetch a user
-app.get("/api/getUser/:id", (req, res) => {
-  const userId = parseInt(req.params.id);
-  const user = inMemStorage.find((u) => u.id === userId);
-  if (!user) return res.status(404).json({ message: "User not found" });
-  return res.status(200).json(user);
-});
-
-// POST for storing user
-app.post("/api/storeUser", (req, res) => {
-  if (!req.body || !req.body.name || !req.body.age || !req.body.profession) {
-    return res.status(400).json({
-      message: "Please provide name, age, and profession.",
-    });
+  try {
+    const users = await User.find();
+    res.status(200).json(users);
+  } catch (err) {
+    res.status(500).json({ message: "Error fetching users", error: err.message });
   }
+});
 
-  const { name, age, profession } = req.body;
+// GET single user by ID
+app.get("/api/getUser/:id", async (req, res) => {
+  try {
+    const user = await User.findById(req.params.id);
+    if (!user) return res.status(404).json({ message: "User not found" });
+    res.status(200).json(user);
+  } catch (err) {
+    res.status(500).json({ message: "Error fetching user", error: err.message });
+  }
+});
 
-  const user = {
-    id: Date.now(),
-    name: name.trim(),
-    age: Number(age),
-    profession: profession.trim(),
-  };
+// POST to create a new user
+app.post("/api/storeUser", async (req, res) => {
+  try {
+    const { name, age, profession } = req.body;
+    if (!name || !age || !profession)
+      return res.status(400).json({ message: "Please provide name, age, and profession." });
 
-  inMemStorage.push(user);
-
-  return res.status(200).json({
-    message: "User Saved!",
-    user,
-  });
+    const newUser = await User.create({ name, age, profession });
+    res.status(200).json({ message: "User Saved!", user: newUser });
+  } catch (err) {
+    res.status(500).json({ message: "Error saving user", error: err.message });
+  }
 });
 
 // PUT to update a user
-app.put("/api/updateUser/:id", (req, res) => {
-  const userId = parseInt(req.params.id);
+app.put("/api/updateUser/:id", async (req, res) => {
+  try {
+    const updatedUser = await User.findByIdAndUpdate(
+      req.params.id,
+      req.body,
+      { new: true, runValidators: true }
+    );
 
-  const index = inMemStorage.findIndex((user) => user.id === userId);
-
-  if (index === -1) {
-    return res.status(404).json({ message: "User not found" });
+    if (!updatedUser) return res.status(404).json({ message: "User not found" });
+    res.status(200).json({ message: "User updated successfully", user: updatedUser });
+  } catch (err) {
+    res.status(500).json({ message: "Error updating user", error: err.message });
   }
-
-  const newUser = {
-    id: inMemStorage[index].id,
-    name: req.body.name ?? inMemStorage[index].name,
-    age: req.body.age ?? inMemStorage[index].age,
-    profession: req.body.profession ?? inMemStorage[index].profession,
-  };
-
-  inMemStorage[index] = newUser;
-
-  res.status(200).json({
-    message: "User updated successfully",
-    user: newUser,
-  });
 });
 
-// DELETE to delete a specific user
+// DELETE a user
 app.delete("/api/deleteUser/:id", async (req, res) => {
-  const userId = req.params.id;
+  try {
+    const deletedUser = await User.findByIdAndDelete(req.params.id);
+    if (!deletedUser) return res.status(404).json({ message: "User not found" });
 
-  const index = inMemStorage.findIndex((user) => user.id == userId);
-
-  if (index === -1) return res.status(404).json({ message: "User not found" });
-
-  inMemStorage.splice(index, 1);
-
-  return res.status(200).json({
-    message: "User removed!",
-    inMemStorage,
-  });
+    res.status(200).json({ message: "User removed!", user: deletedUser });
+  } catch (err) {
+    res.status(500).json({ message: "Error deleting user", error: err.message });
+  }
 });
 
 export default app;
