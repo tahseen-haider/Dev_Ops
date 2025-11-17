@@ -1,15 +1,21 @@
 import express from "express";
 import cors from "cors";
-import User from "./models/User.js"; // Import the Mongoose model
+import swaggerRoute from "./routes/swagger.js";
+import User from "./models/User.js";
 
 const app = express();
+
 app.use(express.json());
 app.use(cors());
+
+app.use("/api-docs", swaggerRoute);
 
 // Health Check
 app.get("/", (req, res) => {
   res.status(200).send("BACKEND IS RUNNING SUCCESSFULLY!");
 });
+
+
 
 // GET all users
 app.get("/api/getUsers", async (req, res) => {

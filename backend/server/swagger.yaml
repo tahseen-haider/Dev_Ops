@@ -1,0 +1,214 @@
+openapi: 3.0.0
+info:
+  title: User Management API
+  description: Simple CRUD API built with Express and MongoDB (Mongoose)
+  version: 1.0.0
+
+servers:
+  - url: http://localhost:5000
+    description: Local development server
+
+paths:
+  /:
+    get:
+      summary: Health Check Route
+      tags:
+        - Health
+      responses:
+        '200':
+          description: Backend running successfully
+          content:
+            text/plain:
+              schema:
+                type: string
+                example: BACKEND IS RUNNING SUCCESSFULLY!
+
+  /api/getUsers:
+    get:
+      summary: Get all users
+      tags:
+        - Users
+      responses:
+        '200':
+          description: List of all users
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/User'
+        '500':
+          description: Error fetching users
+
+  /api/getUser/{id}:
+    get:
+      summary: Get a single user by ID
+      tags:
+        - Users
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: User MongoDB ObjectId
+      responses:
+        '200':
+          description: Single user object
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        '404':
+          description: User not found
+        '500':
+          description: Error fetching user
+
+  /api/storeUser:
+    post:
+      summary: Create a new user
+      tags:
+        - Users
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserCreateRequest'
+      responses:
+        '200':
+          description: User successfully created
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: User Saved!
+                  user:
+                    $ref: '#/components/schemas/User'
+        '400':
+          description: Missing fields
+        '500':
+          description: Error saving user
+
+  /api/updateUser/{id}:
+    put:
+      summary: Update a user
+      tags:
+        - Users
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: User ID
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserUpdateRequest'
+      responses:
+        '200':
+          description: User updated successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: User updated successfully
+                  user:
+                    $ref: '#/components/schemas/User'
+        '404':
+          description: User not found
+        '500':
+          description: Error updating user
+
+  /api/deleteUser/{id}:
+    delete:
+      summary: Delete a user
+      tags:
+        - Users
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: User ID
+      responses:
+        '200':
+          description: User deleted successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: User removed!
+                  user:
+                    $ref: '#/components/schemas/User'
+        '404':
+          description: User not found
+        '500':
+          description: Error deleting user
+
+components:
+  schemas:
+    User:
+      type: object
+      properties:
+        _id:
+          type: string
+          example: "673834f022c8bc6e1a10f8b2"
+        name:
+          type: string
+          example: John Doe
+        age:
+          type: number
+          example: 25
+        profession:
+          type: string
+          example: Engineer
+        createdAt:
+          type: string
+          example: "2025-06-15T12:00:00.000Z"
+        updatedAt:
+          type: string
+          example: "2025-06-15T12:00:00.000Z"
+
+    UserCreateRequest:
+      type: object
+      required:
+        - name
+        - age
+        - profession
+      properties:
+        name:
+          type: string
+          example: John Doe
+        age:
+          type: number
+          example: 25
+        profession:
+          type: string
+          example: Software Developer
+
+    UserUpdateRequest:
+      type: object
+      properties:
+        name:
+          type: string
+          example: Updated Name
+        age:
+          type: number
+          example: 30
+        profession:
+          type: string
+          example: Senior Developer
