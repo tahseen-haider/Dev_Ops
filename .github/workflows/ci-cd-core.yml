@@ -20,23 +20,23 @@ on:
 
 jobs:
   backend-ci:
-    uses: ./.github/workflows/util/ci-backend.yml
+    uses: ./.github/workflows/ci-backend.yml
 
   frontend-ci:
-    uses: ./.github/workflows/util/ci-frontend.yml
+    uses: ./.github/workflows/ci-frontend.yml
 
   docker-build:
     needs:
       - backend-ci
       - frontend-ci
-    uses: ./.github/workflows/util/docker-build.yml
+    uses: ./.github/workflows/docker-build.yml
     secrets:
       docker_user: ${{ secrets.docker_user }}
       docker_password: ${{ secrets.docker_password }}
 
   deploy:
     needs: docker-build
-    uses: ./.github/workflows/util/deploy.yml
+    uses: ./.github/workflows/deploy.yml
     with:
       environment: ${{ inputs.environment }}
     secrets:

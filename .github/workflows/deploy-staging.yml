@@ -7,7 +7,7 @@ on:
 
 jobs:
   deploy:
-    uses: ./.github/workflows/util/ci-cd-core.yml
+    uses: ./.github/workflows/ci-cd-core.yml
     with:
       environment: staging
     secrets:
