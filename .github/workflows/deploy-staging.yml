@@ -7,9 +7,9 @@ on:
 
 jobs:
   deploy:
-    uses: ./.github/workflows/deploy.yml
+    uses: ./.github/workflows/ci-cd-core.yml
     with:
-      branch: main
+      environment: staging
     secrets:
       docker_user: ${{ secrets.DOCKER_USER }}
       docker_password: ${{ secrets.DOCKER_PASSWORD }}

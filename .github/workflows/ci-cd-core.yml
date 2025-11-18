@@ -1,0 +1,45 @@
+name: CI/CD Core Workflow
+
+on:
+  workflow_call:
+    inputs:
+      environment:
+        required: true
+        type: string
+    secrets:
+      docker_user:
+        required: true
+      docker_password:
+        required: true
+      render_api_key:
+        required: true
+      render_service_id_backend:
+        required: true
+      render_service_id_frontend:
+        required: true
+
+jobs:
+  backend-ci:
+    uses: ./.github/workflows/ci-backend.yml
+
+  frontend-ci:
+    uses: ./.github/workflows/ci-frontend.yml
+
+  docker-build:
+    needs:
+      - backend-ci
+      - frontend-ci
+    uses: ./.github/workflows/docker-build.yml
+    secrets:
+      docker_user: ${{ secrets.docker_user }}
+      docker_password: ${{ secrets.docker_password }}
+
+  deploy:
+    needs: docker-build
+    uses: ./.github/workflows/deploy.yml
+    with:
+      environment: ${{ inputs.environment }}
+    secrets:
+      render_api_key: ${{ secrets.render_api_key }}
+      render_service_id_backend: ${{ secrets.render_service_id_backend }}
+      render_service_id_frontend: ${{ secrets.render_service_id_frontend }}
